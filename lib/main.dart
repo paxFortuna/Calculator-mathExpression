@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui_calculator_refactor/buttons.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -79,11 +80,13 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     alignment: Alignment.centerRight,
-                    child: Text(userAnswer,
+                    child: Text(
+                      userAnswer,
                       style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                      ),),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -98,12 +101,13 @@ class _HomePageState extends State<HomePage> {
                 itemCount: buttons.length,
                 itemBuilder: (context, index) {
 
-                  // clear button : index == 0 -> button 'C'
+                  // clear button : 0 -> button 'C'
                   if (index == 0) {
                     return MyButton(
                       buttonTepped: () {
                         setState(() {
                           userQeustion = '';
+                          userAnswer = '';
                         });
                       },
                       buttonText: buttons[index],
@@ -111,16 +115,30 @@ class _HomePageState extends State<HomePage> {
                       textColor: Colors.white,
                     );
 
-                    // Delete Button: index == 1 -> button 'DEL'
+                    // Delete Button: 1 -> button 'DEL'
                   } else if (index == 1) {
                     return MyButton(
                       buttonTepped: () {
                         setState(() {
-                          userQeustion = userQeustion.substring(0, userQeustion.length-1);
+                          userQeustion = userQeustion.substring(
+                              0, userQeustion.length - 1);
                         });
                       },
                       buttonText: buttons[index],
                       color: Colors.red,
+                      textColor: Colors.white,
+                    );
+
+                    // Equal Button : '='
+                  } else if (index == buttons.length - 1) {
+                    return MyButton(
+                      buttonTepped: () {
+                        setState(() {
+                          equalPressed();
+                        });
+                      },
+                      buttonText: buttons[index],
+                      color: Colors.deepPurple,
                       textColor: Colors.white,
                     );
 
@@ -155,5 +173,21 @@ class _HomePageState extends State<HomePage> {
       return true;
     }
     return false;
+  }
+
+  void equalPressed() {
+    String finalQuestion = userQeustion;
+    finalQuestion = finalQuestion.replaceAll('x', '*');
+
+    // (1) Parse expression:
+    Parser p = Parser();
+    Expression exp = p.parse(finalQuestion);
+    // Bind variables and evaluate the expression as real number.
+    // (2) Bind variables:
+    ContextModel cm = ContextModel();
+    // (3) Evaluate expression:
+    double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+    userAnswer = eval.toString();
   }
 }
