@@ -63,14 +63,18 @@ class _HomePageState extends State<HomePage> {
             flex: 2,
             child: Container(
               child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4),
                 itemCount: buttons.length,
                 itemBuilder: (context, index) {
                   return MyButton(
                     buttonText: buttons[index],
-                    color: Colors.deepPurple,
-                    textColor: Colors.white,
+                    color: isOperator(buttons[index])
+                        ? Colors.deepPurple
+                        : Colors.deepPurple[50],
+                    textColor:  isOperator(buttons[index])
+                        ? Colors.white
+                        : Colors.deepPurple,
                   );
                 },
               ),
@@ -79,5 +83,12 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  bool isOperator(String x) {
+    if (x == '%' || x == '/' || x == 'x' || x == '-' || x == '+' || x == '=') {
+      return true;
+    }
+    return false;
   }
 }
