@@ -27,8 +27,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var userQeustion = 'qeustion';
-  var userAnswer = 'answer';
+  var userQeustion = '';
+  var userAnswer = '';
 
   final List<String> buttons = [
     'C',
@@ -97,20 +97,41 @@ class _HomePageState extends State<HomePage> {
                     crossAxisCount: 4),
                 itemCount: buttons.length,
                 itemBuilder: (context, index) {
+
+                  // clear button : index == 0 -> button 'C'
                   if (index == 0) {
                     return MyButton(
+                      buttonTepped: () {
+                        setState(() {
+                          userQeustion = '';
+                        });
+                      },
                       buttonText: buttons[index],
                       color: Colors.green,
                       textColor: Colors.white,
                     );
+
+                    // Delete Button: index == 1 -> button 'DEL'
                   } else if (index == 1) {
                     return MyButton(
+                      buttonTepped: () {
+                        setState(() {
+                          userQeustion = userQeustion.substring(0, userQeustion.length-1);
+                        });
+                      },
                       buttonText: buttons[index],
                       color: Colors.red,
                       textColor: Colors.white,
                     );
+
+                    // Rest of the buttons
                   } else {
                     return MyButton(
+                      buttonTepped: () {
+                        setState(() {
+                          userQeustion += buttons[index];
+                        });
+                      },
                       buttonText: buttons[index],
                       color: isOperator(buttons[index])
                           ? Colors.deepPurple
