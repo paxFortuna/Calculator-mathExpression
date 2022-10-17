@@ -27,6 +27,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var userQeustion = 'qeustion';
+  var userAnswer = 'answer';
+
   final List<String> buttons = [
     'C',
     'DEL',
@@ -57,7 +60,34 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-            child: Container(),
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(height: 50),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      userQeustion,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    alignment: Alignment.centerRight,
+                    child: Text(userAnswer,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),),
+                  ),
+                ],
+              ),
+            ),
           ),
           Expanded(
             flex: 2,
@@ -67,13 +97,13 @@ class _HomePageState extends State<HomePage> {
                     crossAxisCount: 4),
                 itemCount: buttons.length,
                 itemBuilder: (context, index) {
-                  if(index == 0) {
+                  if (index == 0) {
                     return MyButton(
                       buttonText: buttons[index],
                       color: Colors.green,
                       textColor: Colors.white,
                     );
-                  } else if(index == 1) {
+                  } else if (index == 1) {
                     return MyButton(
                       buttonText: buttons[index],
                       color: Colors.red,
@@ -85,12 +115,11 @@ class _HomePageState extends State<HomePage> {
                       color: isOperator(buttons[index])
                           ? Colors.deepPurple
                           : Colors.deepPurple[50],
-                      textColor:  isOperator(buttons[index])
+                      textColor: isOperator(buttons[index])
                           ? Colors.white
                           : Colors.deepPurple,
                     );
                   }
-
                 },
               ),
             ),
